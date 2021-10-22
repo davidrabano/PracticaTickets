@@ -42,19 +42,24 @@ public class Vagon {
 	
 	public int pedirEnteroIntervalo(int min, int max) {
 		// Solicita un entero por consola que esté en el intervalo [min, max]
-		int entero;		
+		int entero=-1;		
 		Scanner entrada=new Scanner(System.in);
 		
 		int contador=0; // Para el log
 		
-		do {
-			System.out.println("(entre " + min + " y " + max + "):");
-			entero=entrada.nextInt();
-			
-			contador++;
-			logger.info("Se ha introducido una respuesta por consola.");
-			
-		} while (entero<min || entero>max);
+		try {
+			do {
+				System.out.println("(entre " + min + " y " + max + "):");
+				entero=entrada.nextInt();
+
+				contador++;
+				logger.info("Se ha introducido una respuesta por consola.");
+				
+			} while (entero<min || entero>max);
+		}
+		catch (Exception e) {
+			logger.error("Se ha producido una excepción: " + e);
+		}
 		
 		if (contador>1) { // Se ha introducido mal por consola la respuesta 'contador' veces
 			logger.warn("Se ha introducido una respuesta errónea por consola " + (contador-1) + ((contador-1)==1 ? " vez." : " veces."));
@@ -69,7 +74,9 @@ public class Vagon {
 		int fila;
 		
 		System.out.print("Introduce la fila ");
-		fila=pedirEnteroIntervalo(0, anchoVagon-1);
+		do {
+			fila=pedirEnteroIntervalo(0, anchoVagon-1);
+		} while (fila==-1);
 		return fila;
 	}
 	
@@ -78,7 +85,9 @@ public class Vagon {
 		int columna;
 		
 		System.out.print("Introduce la columna ");
-		columna=pedirEnteroIntervalo(0, largoVagon-1);	
+		do {
+			columna=pedirEnteroIntervalo(0, largoVagon-1);
+		} while (columna==-1);
 		return columna;
 	}
 	
@@ -96,9 +105,13 @@ public class Vagon {
 		if(vagon[fila][columna]=='L') {
 			resultado=true;
 			
-			logger.info("La plaza [" + fila + ", " + columna + "] está libre");
+			logger.info("La plaza [" + fila + ", " + columna + "] está libre.");
 			
-		}		
+		}
+		else {
+			logger.info("La plaza [" + fila + ", " + columna + "] ya está reservada.");
+		}
+		
 		return resultado;
 	}	
 	
