@@ -16,10 +16,21 @@ public class MenuTickets {
 		String respuesta;
 		Scanner entry=new Scanner(System.in);
 		
+		int contador=0; // Para el log
+		
 		do {
 			System.out.println("si/no");
 			respuesta=entry.nextLine();
+			
+			contador++;
+			logger.info("Se ha introducido una respuesta por consola.");
+			
 		} while (!respuesta.equalsIgnoreCase("si") && !respuesta.equalsIgnoreCase("no"));
+		
+		if (contador>1) { // Se ha introducido mal por consola la respuesta 'contador' veces
+			logger.warn("Se ha introducido una respuesta errónea por consola " + (contador-1) + ((contador-1)==1 ? " vez." : " veces."));
+		}
+		
 		//entrada.close();
 		return respuesta.toLowerCase();
 	}	
