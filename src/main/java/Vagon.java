@@ -7,14 +7,14 @@ import org.apache.log4j.LogManager;
 import org.apache.log4j.Logger; 
 
 public class Vagon {
-
-	private int anchoVagon=4;
-	private int largoVagon=10;
-	char [][]vagon=new char[anchoVagon][largoVagon];
 	
 	// Hay que crear una instancia de tipo Logger en cada clase que queramos hacer un seguimiento de log
 	private static Logger logger = LogManager.getLogger(Vagon.class);
 	
+	private int anchoVagon=4;
+	private int largoVagon=10;
+	char [][]vagon=new char[anchoVagon][largoVagon];
+		
 // Métodos de la clase Vagon
 	public void iniciaVagon() {
 		// Inicia todos los asientos del vagón a la posición libre asignando una 'L'
@@ -23,6 +23,8 @@ public class Vagon {
 				vagon[i][j]='L';
 			}
 		}
+		
+		logger.info("Se ha iniciado un nuevo vagón con todas las plazas libres 'L'");
 	}
 	
 	public void mostrarEstadoVagon() {
@@ -34,6 +36,8 @@ public class Vagon {
 			}
 			System.out.println("\n");
 		}
+		
+		logger.info("Se ha mostrado el estado actual del vagón");
 	}
 	
 	public int pedirEnteroIntervalo(int min, int max) {
@@ -41,10 +45,21 @@ public class Vagon {
 		int entero;		
 		Scanner entrada=new Scanner(System.in);
 		
+		int contador=0; // Para el log
+		
 		do {
 			System.out.println("(entre " + min + " y " + max + "):");
 			entero=entrada.nextInt();
+			
+			contador++;
+			logger.info("Se ha introducido una respuesta por consola.");
+			
 		} while (entero<min || entero>max);
+		
+		if (contador>1) { // Se ha introducido mal por consola la respuesta 'contador' veces
+			logger.warn("Se ha introducido una respuesta errónea por consola " + (contador-1) + ((contador-1)==1 ? " vez." : " veces."));
+		}
+		
 		//entrada.close();		
 		return entero;
 	}
@@ -70,6 +85,8 @@ public class Vagon {
 	public void asignarPlaza(int fila, int columna) {
 		// Reserva una plaza ('R') en la plaza (fila, columna)
 		vagon[fila][columna]='R';
+		
+		logger.info("Se ha asignado la plaza [" + fila + ", " + columna + "].");
 	}
 	
 	public boolean comprobarPlazaLibre(int fila, int columna) {
@@ -78,6 +95,9 @@ public class Vagon {
 		
 		if(vagon[fila][columna]=='L') {
 			resultado=true;
+			
+			logger.info("La plaza [" + fila + ", " + columna + "] está libre");
+			
 		}		
 		return resultado;
 	}	
@@ -96,7 +116,10 @@ public class Vagon {
 			}			
 			i=0;
 			j++;
-		}		
+		}
+		
+		logger.info("Se ha comprobado el estado del vagón");
+		
 		return resultado;
 	}
 	
@@ -111,6 +134,8 @@ public class Vagon {
 					vagon[i][j]='R';
 					asignacion=true;
 					System.out.println("Se le ha asignado el ticket (fila, columna)=(" + i + ", " + j + ").");
+					
+					logger.info("Se ha asignado la plaza [" + i + ", " + j + "] automáticamente.");
 				}
 				i++;				
 			}			
